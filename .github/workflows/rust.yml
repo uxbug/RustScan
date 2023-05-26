@@ -12,7 +12,9 @@ on:
       - '.github/workflows/release.yml'
 
 env:
-  CARGO_TERM_COLOR: always
+  BIN_NAME: rustscan
+  PROJECT_NAME: rustscan
+  REPO_NAME: uxbug/RustScan
 
 jobs:
   build:
