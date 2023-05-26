@@ -26,6 +26,8 @@ jobs:
         with:
           profile: minimal
           toolchain: stable
+      - name: Set working directory
+        run: cd ${{ github.workspace }}/RustScan
       - name: Build RustScan
         run: cargo build --release
       - name: Package binary
