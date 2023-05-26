@@ -2,6 +2,7 @@ use serde_derive::Deserialize;
 use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
+use std::env;
 use structopt::{clap::arg_enum, StructOpt};
 
 const LOWEST_PORT_NUMBER: u16 = 1;
@@ -262,13 +263,20 @@ impl Config {
 }
 
 /// Constructs default path to config toml
+/// add current dir to find config file, fuck home path
 pub fn default_config_path() -> PathBuf {
-    let mut config_path = match dirs::home_dir() {
-        Some(dir) => dir,
-        None => panic!("Could not infer config file path."),
-    };
+    let mut config_path = env::current_dir().unwrap();
     config_path.push(".rustscan.toml");
-    config_path
+    if config_path.exists() {
+        return config_path;
+    }
+    config_path.pop();
+    config_path.push(dirs::home_dir().unwrap());
+    config_path.push(".rustscan.toml");
+    if config_path.exists() {
+        return config_path;
+    }
+    panic!("Could not infer config file path.")
 }
 
 #[cfg(test)]
