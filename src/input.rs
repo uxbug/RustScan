@@ -271,12 +271,12 @@ pub fn default_config_path() -> PathBuf {
         return config_path;
     }
     config_path.pop();
-    config_path.push(dirs::home_dir().unwrap());
+    let mut config_path = match dirs::home_dir() {
+        Some(dir) => dir,
+        None => panic!("Could not infer config file path."),
+    };
     config_path.push(".rustscan.toml");
-    if config_path.exists() {
-        return config_path;
-    }
-    panic!("Could not infer config file path.")
+    config_path
 }
 
 #[cfg(test)]
