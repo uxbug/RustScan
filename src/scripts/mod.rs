@@ -50,6 +50,7 @@ use anyhow::{anyhow, Result};
 use serde_derive::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::convert::TryInto;
+use std::env;
 use std::fs::{self, File};
 use std::io::{self, prelude::*};
 use std::net::IpAddr;
@@ -77,7 +78,7 @@ pub fn init_scripts(scripts: ScriptsRequired) -> Result<Vec<ScriptFile>> {
             Ok(scripts_to_run)
         }
         ScriptsRequired::Custom => {
-            let scripts_dir_base = match dirs::home_dir() {
+            let scripts_dir_base = match env::current_dir() {
                 Some(dir) => dir,
                 None => return Err(anyhow!("Could not infer scripts path.")),
             };
