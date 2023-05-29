@@ -79,8 +79,8 @@ pub fn init_scripts(scripts: ScriptsRequired) -> Result<Vec<ScriptFile>> {
         }
         ScriptsRequired::Custom => {
             let scripts_dir_base = match env::current_dir() {
-                Some(dir) => dir,
-                None => return Err(anyhow!("Could not infer scripts path.")),
+                Ok(dir) => dir,
+                Err(_e) => return Err(anyhow!("Could not infer scripts path.")),
             };
             let script_paths = match find_scripts(scripts_dir_base) {
                 Ok(script_paths) => script_paths,
