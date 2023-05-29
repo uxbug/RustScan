@@ -336,13 +336,13 @@ pub struct ScriptConfig {
 #[cfg(not(tarpaulin_include))]
 impl ScriptConfig {
     pub fn read_config() -> Result<ScriptConfig> {
-        let mut home_dir = match dirs::home_dir() {
-            Some(dir) => dir,
-            None => return Err(anyhow!("Could not infer ScriptConfig path.")),
+        let mut curr_dir = match env::current_dir() {
+            Ok(dir) => dir,
+            Err(_e) => return Err(anyhow!("Could not infer ScriptConfig path.")),
         };
-        home_dir.push(".rustscan_scripts.toml");
+        curr_dir.push(".rustscan_scripts.toml");
 
-        let content = fs::read_to_string(home_dir)?;
+        let content = fs::read_to_string(curr_dir)?;
         let config = toml::from_str::<ScriptConfig>(&content)?;
         Ok(config)
     }
